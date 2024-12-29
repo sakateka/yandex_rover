@@ -1,0 +1,10 @@
+{
+    "lspconfig": {
+        "pyright": {
+            "python.venvPath": ".venv",
+            "python.analysis.diagnosticSeverityOverrides": {
+                "reportMissingModuleSource": false
+            }
+        }
+    }
+ }
