@@ -12,7 +12,7 @@ _CONTROL_CHARACTERISTIC_UUID = bluetooth.UUID("9076b123-5d0c-4539-9504-ea623b673
 # How frequently to send advertising beacons.
 _ADV_INTERVAL_MS = const(250_000)
 _PWM_FREQ = const(20_000)
-_PWM_DUTY = const(230)
+_PWM_DUTY = const(5000)
 
 
 _COMMAND_STOP = const(0)
@@ -35,16 +35,16 @@ def setup_pwm(pin: int) -> PWM:
     return PWM(Pin(pin), freq=_PWM_FREQ, duty_u16=0)
 
 led = Pin(15, Pin.OUT)
-led.on()
+led.value(1)
 
 class Control():
     def __init__(self):
-        self.leftFwd = setup_pwm(0)
-        self.leftBack = setup_pwm(1)
-        self.rightFwd = setup_pwm(2)
-        self.rightBack = setup_pwm(3)
-        self._light = Pin(4, Pin.OUT)
-        self._light.value(0)
+        self.leftFwd = setup_pwm(2)
+        self.leftBack = setup_pwm(3)
+        self.rightFwd = setup_pwm(4)
+        self.rightBack = setup_pwm(5)
+        self._light = Pin(1, Pin.OUT)
+        self._light.value(1)
 
     def set_pwm(self, left_f=0, left_b=0, right_f=0, right_b=0):
         self.leftFwd.duty_u16(left_f)
