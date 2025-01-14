@@ -12,14 +12,14 @@ _CONTROL_CHARACTERISTIC_UUID = bluetooth.UUID("9076b123-5d0c-4539-9504-ea623b673
 # How frequently to send advertising beacons.
 _ADV_INTERVAL_MS = const(250_000)
 _PWM_FREQ = const(20_000)
-_PWM_DUTY = const(5000)
+_PWM_DUTY = const(20_000)
 
 
 _COMMAND_STOP = const(0)
-_COMMAND_LEFT = const(1)
-_COMMAND_RIGHT = const(2)
-_COMMAND_FORWARD = const(3)
-_COMMAND_BACK = const(4)
+_COMMAND_RIGHT = const(1)
+_COMMAND_LEFT = const(2)
+_COMMAND_BACK = const(3)
+_COMMAND_FORWARD = const(4)
 _COMMAND_LIGHT = const(5)
 
 # Register GATT server.
@@ -39,18 +39,18 @@ led.value(1)
 
 class Control():
     def __init__(self):
-        self.leftFwd = setup_pwm(2)
-        self.leftBack = setup_pwm(3)
-        self.rightFwd = setup_pwm(4)
-        self.rightBack = setup_pwm(5)
+        self.ch1 = setup_pwm(19) # D8 blue
+        self.ch2 = setup_pwm(18) # D10 yellow
+        self.ch3 = setup_pwm(22) # D4 green
+        self.ch4 = setup_pwm(23) # D5 red
         self._light = Pin(1, Pin.OUT)
         self._light.value(1)
 
     def set_pwm(self, left_f=0, left_b=0, right_f=0, right_b=0):
-        self.leftFwd.duty_u16(left_f)
-        self.leftBack.duty_u16(left_b)
-        self.rightFwd.duty_u16(right_f)
-        self.rightBack.duty_u16(right_b)
+        self.ch1.duty_u16(left_b)
+        self.ch2.duty_u16(left_f)
+        self.ch3.duty_u16(right_f)
+        self.ch4.duty_u16(right_b)
 
     def turn_left(self):
         self.set_pwm(left_f=0, left_b=_PWM_DUTY, right_f=_PWM_DUTY, right_b=0)
@@ -88,17 +88,17 @@ async def control_task(control: Control, connection):
 
                 command = msg[0]
 
-                if command == _COMMAND_LEFT:
-                    print("Turn left")
-                    control.turn_left()
-                elif command == _COMMAND_RIGHT:
+                if command == _COMMAND_RIGHT:
                     print("Turn right")
+                    control.turn_left()
+                elif command == _COMMAND_LEFT:
+                    print("Turn left")
                     control.turn_right()
-                elif command == _COMMAND_FORWARD:
-                    print("Run forward")
-                    control.go_forward()
                 elif command == _COMMAND_BACK:
                     print("Run back")
+                    control.go_forward()
+                elif command == _COMMAND_FORWARD:
+                    print("Run forward")
                     control.go_back()
                 elif command == _COMMAND_LIGHT:
                     print("Toggle light")
