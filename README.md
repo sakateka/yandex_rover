@@ -29,20 +29,31 @@ Stage3 242rpm
 MX1508 модуль драйвера https://ozon.ru/t/rNKN8pA
 Цена: 200р
 
-## Проводки, олово, паяльник
+## Проводки, припой, паяльник
 
 Уже были, брал давно вот такие, очень рекомендую https://ozon.ru/t/n1xzQPe
 Паяльник pine64
-Олово - какой-то дефолт с озона.
-
+Припой - какой-то дефолт с озона.
 
 ## Разработка прошивки
 
-Я решил разрабатываться на python, поэтому шить в контроллер будем micropython
+Я решил разрабатываться на python, поэтому шить в контроллер будем micropython.
 XIAO esp32-c6 нужно шить micropython-ом с сайта разработчика https://wiki.seeedstudio.com/xiao_esp32c6_micropython/
+
 Шить нужно как описано вот тут https://micropython.org/download/esp32c6/
 
 В коде ничего сложного, труднее всего было уложить в голове про BLE
+
+Закидываем прошивку на устройство
+```
+mpremote cp ble_server_main.py :main.py
+```
+Или запускаем прямо с компа
+```
+mpremote run ble_server_main.py
+```
+
+mpremote поставить по инструкции https://docs.micropython.org/en/latest/reference/mpremote.html
 
 ## Разработка приложения
 
