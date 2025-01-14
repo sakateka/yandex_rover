@@ -46,26 +46,26 @@ class Control():
         self._light = Pin(1, Pin.OUT)
         self._light.value(1)
 
-    def set_pwm(self, left_f=0, left_b=0, right_f=0, right_b=0):
-        self.ch1.duty_u16(left_b)
-        self.ch2.duty_u16(left_f)
-        self.ch3.duty_u16(right_f)
-        self.ch4.duty_u16(right_b)
-
-    def turn_left(self):
-        self.set_pwm(left_f=0, left_b=_PWM_DUTY, right_f=_PWM_DUTY, right_b=0)
+    def set_pwm(self, ch1=0, ch2=0, ch3=0, ch4=0):
+        self.ch1.duty_u16(ch2)
+        self.ch2.duty_u16(ch1)
+        self.ch3.duty_u16(ch3)
+        self.ch4.duty_u16(ch4)
 
     def turn_right(self):
-        self.set_pwm(left_f=_PWM_DUTY, left_b=0, right_f=0, right_b=_PWM_DUTY)
+        self.set_pwm(ch1=0, ch2=_PWM_DUTY, ch3=_PWM_DUTY, ch4=0)
 
-    def go_forward(self):
-        self.set_pwm(left_f=_PWM_DUTY, left_b=0, right_f=_PWM_DUTY, right_b=0)
+    def turn_left(self):
+        self.set_pwm(ch1=_PWM_DUTY, ch2=0, ch3=0, ch4=_PWM_DUTY)
 
     def go_back(self):
-        self.set_pwm(left_f=0, left_b=_PWM_DUTY, right_f=0, right_b=_PWM_DUTY)
+        self.set_pwm(ch1=_PWM_DUTY, ch2=0, ch3=_PWM_DUTY, ch4=0)
+
+    def go_forward(self):
+        self.set_pwm(ch1=0, ch2=_PWM_DUTY, ch3=0, ch4=_PWM_DUTY)
 
     def stop(self):
-        self.set_pwm(left_f=0, left_b=0, right_f=0, right_b=0)
+        self.set_pwm(ch1=0, ch2=0, ch3=0, ch4=0)
 
     def toggle_light(self):
         self._light.value(not self._light.value())
@@ -90,16 +90,16 @@ async def control_task(control: Control, connection):
 
                 if command == _COMMAND_RIGHT:
                     print("Turn right")
-                    control.turn_left()
+                    control.turn_right()
                 elif command == _COMMAND_LEFT:
                     print("Turn left")
-                    control.turn_right()
+                    control.turn_left()
                 elif command == _COMMAND_BACK:
                     print("Run back")
-                    control.go_forward()
+                    control.go_back()
                 elif command == _COMMAND_FORWARD:
                     print("Run forward")
-                    control.go_back()
+                    control.go_forward()
                 elif command == _COMMAND_LIGHT:
                     print("Toggle light")
                     control.toggle_light()
