@@ -43,12 +43,16 @@ https://wiki.seeedstudio.com/xiao_esp32c6_micropython/<br/>
 Шить нужно как описано вот тут https://micropython.org/download/esp32c6/<br/>
 
 В коде ничего сложного, труднее всего было уложить в голове про BLE<br/>
-Закидываем прошивку на устройство<br/>
+Ставим нужные зависимости.
+```sh
+mpremote mip install aioble
 ```
+Закидываем прошивку на устройство<br/>
+```sh
 mpremote cp ble_server_main.py :main.py
 ```
 Или запускаем прямо с компа
-```
+```sh
 mpremote run ble_server_main.py
 ```
 
